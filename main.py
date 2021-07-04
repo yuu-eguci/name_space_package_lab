@@ -18,12 +18,25 @@ import A
 
 # ***
 
-from A.B.C import D
+# from A.B.C import D
 
-print(D)  # -> <function D at 0x101936430>
-          # わかる。
+# print(D)  # -> <function D at 0x101936430>
+#           # わかる。
 # print(E)  # NameError: name 'E' is not defined
 #           # わかる。
-print(A.B.C.E)  # -> <function E at 0x1048925e0>
-                # わからない。
-                # from A.B.C の時点で、 import A がパワーアップするってこと???
+# print(A.B.C.E)  # -> <function E at 0x1048925e0>
+#                 # わからない。
+#                 # from A.B.C の時点で、 import A がパワーアップするってこと???
+
+# ***
+
+from A.B import C
+
+# print(A.B)  # -> AttributeError: module 'A' has no attribute 'B'
+
+from A.B import C
+
+print(A.B)  # -> <module 'A.B' (namespace)>
+            # from A.B することで A.B が参照できるようになっている。
+            # なので「from A.B が import A をパワーアップさせる」という理解は、
+            # 別に間違ってはいないように感じる。
