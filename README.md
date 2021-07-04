@@ -47,4 +47,4 @@ print(A.B.C.E)
 
 ## 実験結果
 
-main.py をご覧あれ。
+[main.py](main.py) をご覧あれ。
