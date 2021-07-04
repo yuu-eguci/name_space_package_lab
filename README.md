@@ -29,10 +29,6 @@ print(keras.preprocessing.image.load_img)  # -> <function load_img at 0x15c0cb5e
                                            # -> なんでやねん。
 ```
 
-### なんでやねん、ってならない方
-
-教えてくださいなんでなんですか……。
-
 ## 実験
 
 ![init](https://user-images.githubusercontent.com/28250432/124377464-0424aa80-dce7-11eb-83f9-f53d1c1ecc30.png)
@@ -53,5 +49,5 @@ print(A.B.C.E)
 
 - 再現した。
 - よって keras 特有の現象ではなく、自分でパッケージを作っても発生する。
-- 今の所「`from A.B.C import D` することで `import A` が**パワーアップして** `A.B.C.E` が使えるようになる……?」というのが実感。
+- 今の所「名前空間パッケージ下のパッケージをひとつ import する(`from A.B.C import D`)ことで名前空間パッケージがようやくロードされ、 `import A` が**パワーアップして** `A.B.C.E` が使えるようになる……?」というのが実感。
 - ともあれ、すごいわかりづらい仕様で Python らしくないと感じるので、ほかの Pythonista 諸兄がどう感じるのか気になる。
