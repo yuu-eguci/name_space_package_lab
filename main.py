@@ -1,22 +1,11 @@
 import A
 
+# *** パターン1: import A したあと A.B.C.E を参照する。 -> 参照できない。
+
 # print(A.B.C.E)  # -> AttributeError: module 'A' has no attribute 'B'
 #                 # B は名前空間パッケージとして作ったので、 AttributeError になります。
 
-# ***
-
-# C は普通のパッケージです。中に D と E があります。
-# from A.B import C
-
-# print(C.D)  # -> <function D at 0x107606430>
-#             # わかる。
-# print(C.E)  # -> <function E at 0x1076065e0>
-#             # わかる。
-# print(A.B.C.E)  # -> <function E at 0x1076065e0>
-#                 # わからない。
-#                 # from A.B の時点で、 import A がパワーアップするってこと???
-
-# ***
+# *** パターン2: from A.B.C import D したあと A.B.C.E を参照する。 -> 参照できる。
 
 # from A.B.C import D
 
@@ -28,7 +17,7 @@ import A
 #                 # わからない。
 #                 # from A.B.C の時点で、 import A がパワーアップするってこと???
 
-# ***
+# *** パターン3: from A.B import C したあと A.B.C.E を参照する。 -> 参照できる。
 
 from A.B import C
 
