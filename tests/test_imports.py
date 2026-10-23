@@ -66,7 +66,23 @@ def test_pattern4_regular_package_behaves_the_same():
     assert lines[2].startswith("<module 'xml.etree' from ")
 
 
-@pytest.mark.parametrize('args', [[], ['5'], ['1', '2']])
+def test_pattern5_shows_sys_modules_and_parent_attribute():
+    result = run('main.py', '5')
+
+    assert result.returncode == 0, result.stderr
+    assert result.stdout == '\n'.join(
+        [
+            "['A']",
+            'False',
+            "['A', 'A.B', 'A.B.C', 'A.B.C.bar', 'A.B.C.baz']",
+            'A.B.C.bar',
+            'True True',
+            '',
+        ]
+    )
+
+
+@pytest.mark.parametrize('args', [[], ['6'], ['1', '2']])
 def test_main_rejects_invalid_arguments(args):
     result = run('main.py', *args)
 
