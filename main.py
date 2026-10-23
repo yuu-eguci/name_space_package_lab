@@ -50,6 +50,7 @@ def pattern3():
 
     print(C)  # -> <module 'A.B.C' from '.../A/B/C/__init__.py'>
     print(A.B)  # -> <module 'A.B' (namespace) from ['.../A/B']>
+    # (↑は 3.12 以降の表示。 3.11 では NamespaceLoader オブジェクトの表示になる。)
     # from A.B することで A.B が参照できるようになっている。
     # なので「from A.B が import A をパワーアップさせる」という理解は、
     # 別に間違ってはいないように感じる。
