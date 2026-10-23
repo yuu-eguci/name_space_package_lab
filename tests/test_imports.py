@@ -56,7 +56,17 @@ def test_pattern3_from_import_binds_namespace_package():
     assert lines[1].startswith("<module 'A.B' ")
 
 
-@pytest.mark.parametrize('args', [[], ['4'], ['1', '2']])
+def test_pattern4_regular_package_behaves_the_same():
+    result = run('main.py', '4')
+
+    assert result.returncode == 0, result.stderr
+    lines = result.stdout.splitlines()
+    assert lines[0] == "AttributeError: module 'xml' has no attribute 'etree'"
+    assert lines[1] == "<class 'xml.etree.ElementTree.Element'>"
+    assert lines[2].startswith("<module 'xml.etree' from ")
+
+
+@pytest.mark.parametrize('args', [[], ['5'], ['1', '2']])
 def test_main_rejects_invalid_arguments(args):
     result = run('main.py', *args)
 
