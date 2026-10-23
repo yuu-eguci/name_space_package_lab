@@ -28,7 +28,7 @@ def pattern2():
     # わかる。
 
     try:
-        print(E)  # noqa: F821
+        print(E)
     except NameError as e:
         # -> NameError: name 'E' is not defined
         # わかる。
