@@ -88,6 +88,25 @@ def test_A_and_B_are_namespace_packages():
     assert result.stdout == 'None None False\n'
 
 
+def test_from_import_imports_and_binds_submodules():
+    # README の補足: import A の時点では A.B はまだ import されていない。
+    # from A.B.C import D で A.B と A.B.C が import され、親の属性にセットされる。
+    code = '\n'.join(
+        [
+            'import sys',
+            'import A',
+            'print("A.B" in sys.modules, hasattr(A, "B"))',
+            'from A.B.C import D',
+            'print("A.B" in sys.modules, "A.B.C" in sys.modules)',
+            'print(A.B is sys.modules["A.B"], A.B.C is sys.modules["A.B.C"])',
+        ]
+    )
+    result = run_code(code)
+
+    assert result.returncode == 0, result.stderr
+    assert result.stdout == 'False False\nTrue True\nTrue True\n'
+
+
 def test_same_behavior_with_regular_package():
     # 名前空間パッケージ特有ではないことを、通常のパッケージ (xml) で確かめる。
     code = '\n'.join(
