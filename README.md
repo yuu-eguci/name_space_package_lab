@@ -72,6 +72,15 @@ print(keras.preprocessing.image.load_img)  # -> <function load_img at 0x15c0cb5e
 
 ![init](https://user-images.githubusercontent.com/28250432/124377464-0424aa80-dce7-11eb-83f9-f53d1c1ecc30.png)
 
+```text
+A/                  # __init__.py なし → 名前空間パッケージ
+└── B/              # __init__.py なし → 名前空間パッケージ
+    └── C/          # __init__.py あり → 通常のパッケージ
+        ├── __init__.py   # from .bar import D / from .baz import E
+        ├── bar.py        # def D()
+        └── baz.py        # def E()
+```
+
 Code A も Code B もどちらも再現するコードを自分で作ってみて、 keras 特有の現象なのか普通に Python の仕様なのか調べる。
 
 ```python

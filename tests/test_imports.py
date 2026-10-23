@@ -166,3 +166,17 @@ def test_readme_and_ci_cover_every_pattern():
 
     assert set(re.findall(r'main\.py (\d+)', readme)) == patterns
     assert set(re.search(r'for p in ([\d ]+); do', ci).group(1).split()) == patterns
+
+
+def test_readme_tree_matches_package_files():
+    # README の「実験」にあるツリーに書いた .py が、 A/ 以下の実際のファイルとずれていないことを確認する。
+    readme_path = ROOT / 'README.md'
+    if not readme_path.exists():
+        pytest.skip('README.md がない')
+    readme = readme_path.read_text(encoding='utf-8')
+    tree = re.search(r'## 実験\n.*?```text\n(.*?)```', readme, re.S)
+    assert tree is not None, 'README の「実験」にツリー (```text) がない'
+
+    in_readme = set(re.findall(r'\w+\.py', tree.group(1)))
+    actual = {p.name for p in (ROOT / 'A').rglob('*.py')}
+    assert in_readme == actual
