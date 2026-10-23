@@ -31,6 +31,22 @@ jobs:
           done
           docker run --rm name-space-package-lab python solution.py
 
+  lock:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      # README のロック更新コマンドをそのまま実行して、ロックファイルが変わらないこと、
+      # 生成物が runner のユーザー所有になることを確認する。
+      - run: |
+          cmd=$(sed -n '/^docker run --rm --user/,/requirements-dev.txt"$/p' README.md)
+          test -n "$cmd"
+          eval "$cmd"
+          git diff --exit-code requirements-dev.txt
+          test "$(stat -c %u requirements-dev.txt)" = "$(id -u)"
+
   test:
     runs-on: ubuntu-latest
     timeout-minutes: 10
