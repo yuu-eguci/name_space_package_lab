@@ -51,7 +51,8 @@ def test_pattern3_from_import_binds_namespace_package():
     assert result.returncode == 0, result.stderr
     lines = result.stdout.splitlines()
     assert lines[0].startswith("<module 'A.B.C' from ")
-    assert lines[1].startswith("<module 'A.B' (namespace)")
+    # repr は Python のバージョンで変わるので、名前空間かどうかは別のテストで確認する。
+    assert lines[1].startswith("<module 'A.B' ")
 
 
 @pytest.mark.parametrize('args', [[], ['4'], ['1', '2']])

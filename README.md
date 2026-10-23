@@ -4,7 +4,7 @@ Name space package lab
 `import A` だけでは `A.B.C.E` を参照できないのに、 `from A.B.C import D` をはさむと参照できるようになる。この謎現象を再現・実験するリポジトリです。
 
 - Docker: 対応!
-- Python: 3.14 (Docker イメージ) / 3.10 以上で動作
+- Python: 3.14 (Docker イメージ) / 3.10〜3.14 で CI 確認
 - Lint: [Ruff](https://docs.astral.sh/ruff/) (`ruff check` / `ruff format --check`)
 - Test: [pytest](https://docs.pytest.org/)
 
@@ -25,7 +25,7 @@ docker run --rm name-space-package-lab ruff format --check .
 docker run --rm name-space-package-lab pytest
 ```
 
-Docker なしの場合 (Python 3.10 以上)。 `main.py` と `solution.py` は標準ライブラリだけで動くので、 lint とテストをしないならインストール不要です。
+Docker なしで動かす場合 (Python 3.10 以上) はこうします。 `main.py` と `solution.py` は標準ライブラリだけで動くので、 lint とテストをしないならインストール不要です。
 
 ```bash
 python main.py 1
