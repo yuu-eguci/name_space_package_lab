@@ -4,7 +4,7 @@ Name space package lab
 `import A` だけでは `A.B.C.E` を参照できないのに、 `from A.B.C import D` をはさむと参照できるようになる。この挙動を再現して確かめるリポジトリ。
 
 - Docker: 対応!
-- Python: 3.14 (Docker イメージ) / 3.10〜3.14 で CI 確認
+- Python: 3.14 (Docker イメージ) / 3.11〜3.15 で CI 確認
 - Lint: [Ruff](https://docs.astral.sh/ruff/) (`ruff check` / `ruff format --check`)
 - Test: [pytest](https://docs.pytest.org/)
 
@@ -25,7 +25,7 @@ docker run --rm name-space-package-lab ruff format --check .
 docker run --rm name-space-package-lab pytest
 ```
 
-Docker なしで動かす場合 (Python 3.10 以上) はこう。 `main.py` と `solution.py` は標準ライブラリだけで動くので、 lint とテストをしないならインストール不要。
+Docker なしで動かす場合 (Python 3.11 以上) はこう。 `main.py` と `solution.py` は標準ライブラリだけで動くので、 lint とテストをしないならインストール不要。
 
 ```bash
 python3 main.py 1
@@ -36,7 +36,7 @@ pip install --require-hashes -r requirements-dev.txt
 ruff check . && ruff format --check . && pytest
 ```
 
-GitHub Actions でも、 Docker 上の lint・テストと、 Python 3.10〜3.14 でのテストを実行する。
+GitHub Actions でも、 Docker 上の lint・テストと、 Python 3.11〜3.15 でのテストを実行する。
 
 ## 謎現象
 
@@ -135,8 +135,10 @@ BEAUTIFUL...
 `requirements-dev.txt` は `requirements-dev.in` から生成した、ハッシュ付きのロックファイル。更新するときはこう。
 
 ```bash
-docker run --rm -v "$PWD":/work -w /work python:3.14-slim sh -c \
-  "pip install uv && uv pip compile --universal --python-version 3.10 --generate-hashes requirements-dev.in -o requirements-dev.txt"
+docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp -v "$PWD":/work -w /work python:3.14-slim sh -c \
+  "pip install -q --user uv==0.13.5 && python -m uv pip compile --universal --python-version 3.11 --generate-hashes requirements-dev.in -o requirements-dev.txt"
 ```
+
+uv のバージョンは固定している。ホスト側と同じユーザー ID・グループ ID で実行するので、生成したファイルが root 所有にならない。
 
 `Dockerfile` のベースイメージは digest で固定している。 Python を上げるときは、タグと digest をあわせて更新する。
