@@ -1,14 +1,14 @@
 Name space package lab
 ===
 
-`import A` だけでは `A.B.C.E` を参照できないのに、 `from A.B.C import D` をはさむと参照できるようになる。この謎現象を再現・実験するリポジトリです。
+`import A` だけでは `A.B.C.E` を参照できないのに、 `from A.B.C import D` をはさむと参照できるようになる。この挙動を再現して確かめるリポジトリ。
 
 - Docker: 対応!
 - Python: 3.14 (Docker イメージ) / 3.10〜3.14 で CI 確認
 - Lint: [Ruff](https://docs.astral.sh/ruff/) (`ruff check` / `ruff format --check`)
 - Test: [pytest](https://docs.pytest.org/)
 
-## クイックスタート
+## パッと実行してみたい
 
 ```bash
 docker build -t name-space-package-lab .
@@ -25,7 +25,7 @@ docker run --rm name-space-package-lab ruff format --check .
 docker run --rm name-space-package-lab pytest
 ```
 
-Docker なしで動かす場合 (Python 3.10 以上) はこうします。 `main.py` と `solution.py` は標準ライブラリだけで動くので、 lint とテストをしないならインストール不要です。
+Docker なしで動かす場合 (Python 3.10 以上) はこう。 `main.py` と `solution.py` は標準ライブラリだけで動くので、 lint とテストをしないならインストール不要。
 
 ```bash
 python main.py 1
@@ -36,11 +36,11 @@ pip install --require-hashes -r requirements-dev.txt
 ruff check . && ruff format --check . && pytest
 ```
 
-GitHub Actions でも、 Docker 上の lint・テストと、 Python 3.10〜3.14 でのテストを実行しています。
+GitHub Actions でも、 Docker 上の lint・テストと、 Python 3.10〜3.14 でのテストを実行する。
 
 ## 謎現象
 
-⚗️ keras コードを書いているとき、謎現象が発生しました。その現象を再現、実験するために作ったリポジトリです。
+keras のコードを書いているとき、 import の順序で参照できる属性が変わる現象に出会った。以下は当時のコード例。現在の keras での再現は確認していない。
 
 - これ↓は Attribute エラー。
 
@@ -80,11 +80,11 @@ from A.B.C import D
 print(A.B.C.E)
 ```
 
-`A` と `A/B` は `__init__.py` のない名前空間パッケージ、 `A/B/C` は `__init__.py` のある通常のパッケージです。
+`A` と `A/B` は `__init__.py` のない名前空間パッケージ、 `A/B/C` は `__init__.py` のある通常のパッケージ。
 
 ## 実験結果
 
-[main.py](main.py) をご覧あれ。 `python main.py <パターン番号>` で各パターンを実行できます。
+[main.py](main.py) で確かめられる。 `python main.py <パターン番号>` で各パターンを実行できる。
 
 | コマンド | やること | 結果 |
 | --- | --- | --- |
@@ -92,20 +92,19 @@ print(A.B.C.E)
 | `python main.py 2` | `from A.B.C import D` したあと `A.B.C.E` を参照 | 参照できる (`E` 単体は `NameError`) |
 | `python main.py 3` | `from A.B import C` したあと `A.B` を参照 | 参照できる |
 
-import したモジュールはプロセス内でキャッシュされるため、パターンは 1 回の実行につきひとつだけ動かします。
+import したモジュールはプロセス内でキャッシュされるため、パターンは 1 回の実行につきひとつだけ動かす。
 
 - 再現した。
 - よって keras 特有の現象ではなく、自分でパッケージを作っても発生する。
-- 今の所「名前空間パッケージ下のパッケージをひとつ import する(`from A.B.C import D`)ことで名前空間パッケージがようやくロードされ、 `import A` が**パワーアップして** `A.B.C.E` が使えるようになる……?」というのが実感。(パワーアップて。) → 正確な仕組みは下の補足を参照。
-- ともあれ、すごいわかりづらい仕様で Python らしくないと感じるので、ほかの Pythonista 諸兄がどう感じるのか気になる。
+- すごいわかりづらい仕様で Python らしくないと感じるので、ほかの Pythonista 諸兄がどう感じるのか気になる。
 
 ### 補足: 名前空間パッケージ特有の仕様ではない
 
-`import A` の時点で `A` 自体はロードされています。 `A.B` を参照できないのは、まだ `A.B` が import されていないからです。
+`import A` の時点で `A` 自体はロードされている。 `A.B` を参照できないのは、まだ `A.B` が import されていないから。
 
-Python では、サブモジュールを import すると、そのサブモジュールが親パッケージの属性としてセットされます ([The import system - Submodules](https://docs.python.org/3/reference/import.html#submodules))。 `from A.B.C import D` は `A`、 `A.B`、 `A.B.C` を順に import するので、その副作用で `A.B` と `A.B.C` が属性としてセットされ、 `A.B.C.E` が参照できるようになります。
+Python では、サブモジュールを import すると、そのサブモジュールが親パッケージの属性としてセットされる ([The import system - Submodules](https://docs.python.org/3/reference/import.html#submodules))。 `from A.B.C import D` は `A`、 `A.B`、 `A.B.C` を順に import するので、その副作用で `A.B` と `A.B.C` が属性としてセットされ、 `A.B.C.E` が参照できるようになる。
 
-これは `__init__.py` のある通常のパッケージでも同じです。たとえば標準ライブラリの `xml` でも起きます。
+これは `__init__.py` のある通常のパッケージでも同じ。たとえば標準ライブラリの `xml` でも起きる。
 
 ```python
 import xml
@@ -117,11 +116,11 @@ from xml.etree.ElementTree import Element
 print(xml.etree)  # -> <module 'xml.etree' from '...'>
 ```
 
-keras の場合も、 `import keras` の時点では `keras.preprocessing` がまだ import されていなかった、ということになります。
+当時の keras の例も、子モジュールの import によって親パッケージの属性が追加されたと考えられる。
 
 ### 「すごいわかりづらい」の解消方法
 
-[solution.py](solution.py) をご覧あれ。端的にいえばこう↓です。
+[solution.py](solution.py) のように、使うパッケージを直接 import すればいい。
 
 ```python
 import A.B.C
@@ -133,11 +132,11 @@ BEAUTIFUL...
 
 ## 開発メモ
 
-`requirements-dev.txt` は `requirements-dev.in` から生成した、ハッシュ付きのロックファイルです。更新するときはこうします。
+`requirements-dev.txt` は `requirements-dev.in` から生成した、ハッシュ付きのロックファイル。更新するときはこう。
 
 ```bash
 docker run --rm -v "$PWD":/work -w /work python:3.14-slim sh -c \
   "pip install uv && uv pip compile --universal --python-version 3.10 --generate-hashes requirements-dev.in -o requirements-dev.txt"
 ```
 
-`Dockerfile` のベースイメージは digest で固定しています。 Python を上げるときは、タグと digest をあわせて更新してください。
+`Dockerfile` のベースイメージは digest で固定している。 Python を上げるときは、タグと digest をあわせて更新する。
