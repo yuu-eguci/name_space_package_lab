@@ -150,22 +150,20 @@ def test_same_behavior_with_regular_package():
     assert result.stdout == 'False\nTrue\n'
 
 
-def test_readme_and_ci_cover_every_pattern():
-    # README と ci.yml に書いてあるパターン番号が、 main.py の PATTERNS とずれていないことを確認する。
+def test_readme_covers_every_pattern():
+    # README に書いてあるパターン番号が、 main.py の PATTERNS とずれていないことを確認する。
+    # (CI は README の bash ブロックをそのまま実行するので、 README が合っていれば CI も合う。)
     result = run_code('import main; print(" ".join(sorted(main.PATTERNS)))')
     assert result.returncode == 0, result.stderr
     patterns = set(result.stdout.split())
 
     readme_path = ROOT / 'README.md'
-    ci_path = ROOT / '.github' / 'workflows' / 'ci.yml'
-    if not (readme_path.exists() and ci_path.exists()):
-        # Docker イメージには README と ci.yml を入れていないので、チェックアウト上でだけ確認する。
-        pytest.skip('README.md か ci.yml がない')
+    if not readme_path.exists():
+        # Docker イメージには README を入れていないので、チェックアウト上でだけ確認する。
+        pytest.skip('README.md がない')
     readme = readme_path.read_text(encoding='utf-8')
-    ci = ci_path.read_text(encoding='utf-8')
 
     assert set(re.findall(r'main\.py (\d+)', readme)) == patterns
-    assert set(re.search(r'for p in ([\d ]+); do', ci).group(1).split()) == patterns
 
 
 def test_readme_tree_matches_package_files():
