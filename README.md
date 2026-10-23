@@ -36,7 +36,7 @@ pip install --require-hashes -r requirements-dev.txt
 ruff check . && ruff format --check . && pytest
 ```
 
-GitHub Actions でも、 Docker 上の lint・テストと、 Python 3.11〜3.15 でのテストを実行する。
+GitHub Actions でも、 Docker 上の lint・テストと、 Python 3.11〜3.15 でのテストを実行する。ロックファイルも、下の開発メモにあるコマンドで作り直して差分が出ないことを確認している。
 
 ## 謎現象
 
