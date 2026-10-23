@@ -157,21 +157,14 @@ def test_readme_covers_every_pattern():
     assert result.returncode == 0, result.stderr
     patterns = set(result.stdout.split())
 
-    readme_path = ROOT / 'README.md'
-    if not readme_path.exists():
-        # Docker イメージには README を入れていないので、チェックアウト上でだけ確認する。
-        pytest.skip('README.md がない')
-    readme = readme_path.read_text(encoding='utf-8')
+    readme = (ROOT / 'README.md').read_text(encoding='utf-8')
 
     assert set(re.findall(r'main\.py (\d+)', readme)) == patterns
 
 
 def test_readme_tree_matches_package_files():
     # README の「実験」にあるツリーに書いた .py が、 A/ 以下の実際のファイルとずれていないことを確認する。
-    readme_path = ROOT / 'README.md'
-    if not readme_path.exists():
-        pytest.skip('README.md がない')
-    readme = readme_path.read_text(encoding='utf-8')
+    readme = (ROOT / 'README.md').read_text(encoding='utf-8')
     tree = re.search(r'## 実験\n.*?```text\n(.*?)```', readme, re.S)
     assert tree is not None, 'README の「実験」にツリー (```text) がない'
 
