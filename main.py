@@ -3,6 +3,7 @@
 #   python main.py 1
 #   python main.py 2
 #   python main.py 3
+#   python main.py 4
 
 import argparse
 
@@ -55,7 +56,26 @@ def pattern3():
     # 別に間違ってはいないように感じる。
 
 
-PATTERNS = {'1': pattern1, '2': pattern2, '3': pattern3}
+def pattern4():
+    # *** パターン4: __init__.py のある通常のパッケージ (標準ライブラリの xml) でも同じことが起きる。
+    import xml
+
+    try:
+        print(xml.etree)
+    except AttributeError as e:
+        # -> AttributeError: module 'xml' has no attribute 'etree'
+        # import xml だけでは xml.etree はまだ import されていない。パターン1と同じ。
+        print(f'AttributeError: {e}')
+
+    from xml.etree.ElementTree import Element
+
+    print(Element)  # -> <class 'xml.etree.ElementTree.Element'>
+    print(xml.etree)  # -> <module 'xml.etree' from '.../xml/etree/__init__.py'>
+    # from xml.etree.ElementTree で xml.etree が import され、 xml の属性にセットされた。
+    # 名前空間パッケージ特有の挙動ではない、ということ。
+
+
+PATTERNS = {'1': pattern1, '2': pattern2, '3': pattern3, '4': pattern4}
 
 
 if __name__ == '__main__':
