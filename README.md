@@ -139,6 +139,6 @@ docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp -v "$PWD":/work -w /work
   "pip install -q --user uv==0.13.5 && python -m uv pip compile --universal --python-version 3.11 --generate-hashes requirements-dev.in -o requirements-dev.txt"
 ```
 
-uv のバージョンは固定している。ホストのユーザーで実行するので、生成したファイルが root 所有にならない。
+uv のバージョンは固定している。ホスト側と同じユーザー ID・グループ ID で実行するので、生成したファイルが root 所有にならない。
 
 `Dockerfile` のベースイメージは digest で固定している。 Python を上げるときは、タグと digest をあわせて更新する。
