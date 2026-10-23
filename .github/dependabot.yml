@@ -1,0 +1,12 @@
+# actions の SHA と Docker ベースイメージの digest を月 1 回追従する。
+# pip は対象外: Dependabot が書き換えるロックは uv のヘッダと変わって lock ジョブが落ちる。
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+  - package-ecosystem: docker
+    directory: /
+    schedule:
+      interval: monthly
