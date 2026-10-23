@@ -92,7 +92,7 @@ print(A.B.C.E)
 | `python main.py 1` | `import A` したあと `A.B.C.E` を参照 | `AttributeError` |
 | `python main.py 2` | `from A.B.C import D` したあと `A.B.C.E` を参照 | 参照できる (`E` 単体は `NameError`) |
 | `python main.py 3` | `from A.B import C` したあと `A.B` を参照 | 参照できる |
-| `python main.py 4` | 通常のパッケージ `xml` で同じことをする (補足を参照) | `import xml` だけだと `AttributeError`、 `from xml.etree.ElementTree import ...` のあとは参照できる |
+| `python main.py 4` | 通常のパッケージ `xml` で同じ動きを確かめる (補足を参照) | `import xml` だけでは `AttributeError`。 `from xml.etree.ElementTree import ...` のあとは参照できる |
 
 import したモジュールはプロセス内でキャッシュされるため、パターンは 1 回の実行につきひとつだけ動かす。
 
@@ -118,7 +118,7 @@ from xml.etree.ElementTree import Element
 print(xml.etree)  # -> <module 'xml.etree' from '...'>
 ```
 
-`python main.py 4` で同じことを動かして確かめられる。
+`python main.py 4` で同じ動きを確かめられる。
 
 当時の keras の例も、子モジュールの import によって親パッケージの属性が追加されたと考えられる。
 
