@@ -130,8 +130,13 @@ def test_readme_and_ci_cover_every_pattern():
     assert result.returncode == 0, result.stderr
     patterns = set(result.stdout.split())
 
-    readme = (ROOT / 'README.md').read_text(encoding='utf-8')
-    ci = (ROOT / '.github' / 'workflows' / 'ci.yml').read_text(encoding='utf-8')
+    readme_path = ROOT / 'README.md'
+    ci_path = ROOT / '.github' / 'workflows' / 'ci.yml'
+    if not (readme_path.exists() and ci_path.exists()):
+        # Docker イメージには README と ci.yml を入れていないので、チェックアウト上でだけ確認する。
+        pytest.skip('README.md か ci.yml がない')
+    readme = readme_path.read_text(encoding='utf-8')
+    ci = ci_path.read_text(encoding='utf-8')
 
     assert set(re.findall(r'main\.py (\d+)', readme)) == patterns
     assert set(re.search(r'for p in ([\d ]+); do', ci).group(1).split()) == patterns
