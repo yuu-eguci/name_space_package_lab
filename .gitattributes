@@ -1,0 +1,2 @@
+# 改行は LF に固定する。 CRLF だと readme ジョブの awk が bash ブロックを見つけられない。
+* text=auto eol=lf
