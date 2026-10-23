@@ -106,7 +106,7 @@ import したモジュールはプロセス内でキャッシュされるため�
 
 `import A` の時点で `A` 自体はロードされている。 `A.B` を参照できないのは、まだ `A.B` が import されていないから。
 
-Python では、サブモジュールを import すると、そのサブモジュールが親パッケージの属性としてセットされる ([The import system - Submodules](https://docs.python.org/3/reference/import.html#submodules))。 `from A.B.C import D` は `A`、 `A.B`、 `A.B.C` を順に import するので、その副作用で `A.B` と `A.B.C` が属性としてセットされ、 `A.B.C.E` が参照できるようになる。 `python main.py 5` で、 `sys.modules` に `A.B` と `A.B.C` が増えて `A` の属性になるところを見られる。
+Python では、サブモジュールを import すると、そのサブモジュールが親パッケージの属性としてセットされる ([The import system - Submodules](https://docs.python.org/3/reference/import.html#submodules))。 `from A.B.C import D` は `A`、 `A.B`、 `A.B.C` を順に import するので、その副作用で `A.B` と `A.B.C` が属性としてセットされ、 `A.B.C.E` が参照できるようになる。 `python main.py 5` で、 `sys.modules` に `A.B` と `A.B.C` が増え、それぞれ親パッケージの属性になるところを見られる。
 
 これは `__init__.py` のある通常のパッケージでも同じ。たとえば標準ライブラリの `xml` でも起きる。
 
