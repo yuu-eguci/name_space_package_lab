@@ -2,7 +2,7 @@
 target-version = "py311"
 
 [tool.ruff.lint]
-select = ["E", "F", "W", "I", "B", "UP"]
+select = ["E", "F", "W", "I", "B", "UP", "RUF100"]
 # Ruff は全角文字を幅 2 として数え、日本語コメントが引っかかるので E501 は無効にする。
 ignore = ["E501"]
 
