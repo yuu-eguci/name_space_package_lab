@@ -28,7 +28,7 @@ jobs:
       - run: docker run --rm name-space-package-lab ruff format --check .
       - run: docker run --rm name-space-package-lab pytest
       - run: |
-          for p in 1 2 3 4; do
+          for p in 1 2 3 4 5; do
             docker run --rm name-space-package-lab python main.py "$p"
           done
           docker run --rm name-space-package-lab python solution.py

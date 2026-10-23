@@ -13,11 +13,12 @@ Name space package lab
 ```bash
 docker build -t name-space-package-lab .
 
-# 実験 (パターン 1〜4) と解消方法
+# 実験 (パターン 1〜5) と解消方法
 docker run --rm name-space-package-lab python main.py 1
 docker run --rm name-space-package-lab python main.py 2
 docker run --rm name-space-package-lab python main.py 3
 docker run --rm name-space-package-lab python main.py 4
+docker run --rm name-space-package-lab python main.py 5
 docker run --rm name-space-package-lab python solution.py
 
 # lint とテスト
@@ -93,6 +94,7 @@ print(A.B.C.E)
 | `python main.py 2` | `from A.B.C import D` したあと `A.B.C.E` を参照 | 参照できる (`E` 単体は `NameError`) |
 | `python main.py 3` | `from A.B import C` したあと `A.B` を参照 | 参照できる |
 | `python main.py 4` | 通常のパッケージ `xml` で同じ動きを確かめる (補足を参照) | `import xml` だけでは `AttributeError`。 `from xml.etree.ElementTree import ...` のあとは参照できる |
+| `python main.py 5` | `from A.B.C import D` の前後で `sys.modules` を見る (補足を参照) | import 後に `A.B` と `A.B.C` が増え、 `A.B` は `sys.modules` にあるモジュールそのもの |
 
 import したモジュールはプロセス内でキャッシュされるため、パターンは 1 回の実行につきひとつだけ動かす。
 
@@ -104,7 +106,7 @@ import したモジュールはプロセス内でキャッシュされるため�
 
 `import A` の時点で `A` 自体はロードされている。 `A.B` を参照できないのは、まだ `A.B` が import されていないから。
 
-Python では、サブモジュールを import すると、そのサブモジュールが親パッケージの属性としてセットされる ([The import system - Submodules](https://docs.python.org/3/reference/import.html#submodules))。 `from A.B.C import D` は `A`、 `A.B`、 `A.B.C` を順に import するので、その副作用で `A.B` と `A.B.C` が属性としてセットされ、 `A.B.C.E` が参照できるようになる。
+Python では、サブモジュールを import すると、そのサブモジュールが親パッケージの属性としてセットされる ([The import system - Submodules](https://docs.python.org/3/reference/import.html#submodules))。 `from A.B.C import D` は `A`、 `A.B`、 `A.B.C` を順に import するので、その副作用で `A.B` と `A.B.C` が属性としてセットされ、 `A.B.C.E` が参照できるようになる。 `python main.py 5` で、 `sys.modules` に `A.B` と `A.B.C` が増え、それぞれ親パッケージの属性になるところを見られる。
 
 これは `__init__.py` のある通常のパッケージでも同じ。たとえば標準ライブラリの `xml` でも起きる。
 
