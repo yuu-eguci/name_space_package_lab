@@ -7,6 +7,7 @@ Name space package lab
 - Python: 3.14 (Docker イメージ) / 3.11〜3.15 で CI 確認
 - Lint: [Ruff](https://docs.astral.sh/ruff/) (`ruff check` / `ruff format --check`)
 - Test: [pytest](https://docs.pytest.org/)
+- CI: [![CI](https://github.com/yuu-eguci/name_space_package_lab/actions/workflows/ci.yml/badge.svg)](https://github.com/yuu-eguci/name_space_package_lab/actions/workflows/ci.yml)
 
 ## パッと実行してみたい
 
@@ -38,7 +39,7 @@ pip install --require-hashes -r requirements-dev.txt
 ruff check . && ruff format --check . && pytest
 ```
 
-GitHub Actions でも、 Docker 上の lint・テストと、 Python 3.11〜3.15 でのテストを実行する。ロックファイルも、下の開発メモにあるコマンドで作り直して差分が出ないことを確認している。
+GitHub Actions では、 Python 3.11〜3.15 でテストを実行するのに加えて、この README の bash ブロックを上から順にそのまま実行している。手順が古くなるとそこで落ちるし、最後のロック更新コマンドで差分が出ないことも確認できる。
 
 ## 謎現象
 
