@@ -4,6 +4,7 @@
 #   python main.py 2
 #   python main.py 3
 #   python main.py 4
+#   python main.py 5
 
 import argparse
 
@@ -75,7 +76,29 @@ def pattern4():
     # 名前空間パッケージ特有の挙動ではない、ということ。
 
 
-PATTERNS = {'1': pattern1, '2': pattern2, '3': pattern3, '4': pattern4}
+def pattern5():
+    # *** パターン5: 補足の仕組みを sys.modules で見る。
+    import sys
+
+    import A
+
+    def loaded():
+        return sorted(m for m in sys.modules if m == 'A' or m.startswith('A.'))
+
+    print(loaded())  # -> ['A']
+    print(hasattr(A, 'B'))  # -> False
+    # import A の時点では A.B はまだ import されていないので、属性にもない。
+
+    from A.B.C import D
+
+    print(loaded())  # -> ['A', 'A.B', 'A.B.C', 'A.B.C.bar', 'A.B.C.baz']
+    # A.B と A.B.C が import された。 bar と baz は A/B/C/__init__.py が import している。
+    print(D.__module__)  # -> A.B.C.bar
+    print(A.B is sys.modules['A.B'], A.B.C is sys.modules['A.B.C'])  # -> True True
+    # 親パッケージの属性にセットされたのは、 sys.modules にあるモジュールそのもの。
+
+
+PATTERNS = {'1': pattern1, '2': pattern2, '3': pattern3, '4': pattern4, '5': pattern5}
 
 
 if __name__ == '__main__':
