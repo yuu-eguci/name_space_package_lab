@@ -39,7 +39,7 @@ pip install --require-hashes -r requirements-dev.txt
 ruff check . && ruff format --check . && pytest
 ```
 
-GitHub Actions では、 Python 3.11〜3.15 でテストを実行するのに加えて、この README の bash ブロックを上から順にそのまま実行している。手順が古くなるとそこで落ちるし、最後のロック更新コマンドで差分が出ないことも確認できる。
+GitHub Actions では、 Python 3.11〜3.15 のテストに加えて、この README の bash ブロックを上から順にそのまま実行する。手順が古くなると CI が落ちるし、最後のロック更新コマンドで差分が出ないことも確認できる。
 
 ## 謎現象
 
