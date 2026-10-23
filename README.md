@@ -28,9 +28,9 @@ docker run --rm name-space-package-lab pytest
 Docker なしで動かす場合 (Python 3.11 以上) はこう。 `main.py` と `solution.py` は標準ライブラリだけで動くので、 lint とテストをしないならインストール不要。
 
 ```bash
-python main.py 1
+python3 main.py 1
 
-python -m venv .venv
+python3 -m venv .venv
 . .venv/bin/activate
 pip install --require-hashes -r requirements-dev.txt
 ruff check . && ruff format --check . && pytest
